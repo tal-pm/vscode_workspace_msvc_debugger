@@ -25,7 +25,7 @@ The debugger supports subfolder of the workspace and when a c/c++ file is run vi
  ┗ 📂Source<br>
 
  The project may have an additional folder: <br>
- 📂Libs<br>
+ 📂Libs
 
 ## Folder name patterns
 
@@ -44,7 +44,6 @@ The debugger supports subfolder of the workspace and when a c/c++ file is run vi
 > Optional Folder Type `Library Directory`  
 > Regex `((?:[Ll]ibraries|[Ll]ib(?:rary|s)?)(?!.*(?:[Ll]ibraries|[Ll]ib(?:rary|s)?)).*)`
 
-<br>
 
 ## Config file
 You may also create a file named `config.json`:<br>
@@ -52,7 +51,6 @@ The file holds two properties:<br>
   * "ProjectName" - The name of the project when compiled. Default to the currently run file name.
   * "ExcludeFolders" - A list of folder names to exclude from the compilation process. Default to []
 
-<br>
 
 ## x64/x86 Compiling
 In the vscode launch settings you may specify the type of compilation from x64 or x86. Default to x64.
