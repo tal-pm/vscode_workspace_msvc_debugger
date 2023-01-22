@@ -12,6 +12,7 @@
 - [Additional Information:](#additional-information)
   - [Settings.json](#settingsjson)
   - [MSVC Compiler path](#msvc-compiler-path)
+  - [Project dependencies:](#project-dependencies)
 
 # Project Structure
 
@@ -76,3 +77,9 @@ These settings are the default folder names for the project when a folder is mis
 
 ## MSVC Compiler path
 In `compile_cl.bat` you may change the msvc paths found in the `LOAD_COMPILER` label.
+
+## Project dependencies:
+The following vscode extenstion are a required dependency to make the compiler work: <br>
+  1. `C/C++: `https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools
+  2. `Tasks Shell Input: `https://marketplace.visualstudio.com/items?itemName=augustocdias.tasks-shell-input
+  3. `Command Variable: `https://marketplace.visualstudio.com/items?itemName=rioj7.command-variable
