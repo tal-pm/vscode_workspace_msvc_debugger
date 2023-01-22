@@ -16,7 +16,7 @@
 
 # Project Structure
 
-The debugger supports subfolder of the workspace and when a c/c++ file is run via the debugger the debugger will create the following project structure.
+The debugger supports subfolder of the workspace and when a c/c++ file is run via the debugger the debugger will create the following project structure:
 
 📦\<Project Name><br>
  ┣ 📂Build<br>
@@ -24,7 +24,7 @@ The debugger supports subfolder of the workspace and when a c/c++ file is run vi
  ┣ 📂Resources<br>
  ┗ 📂Source<br>
 
- The project may have an additional folder: <br>
+ The project can include the additional folder: <br>
  📂Libs
 
 ## Folder name patterns
