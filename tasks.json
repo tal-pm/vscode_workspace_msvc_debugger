@@ -1,0 +1,203 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "C/C++: x64 cl.exe build project",
+      "command": "",
+      "args": [
+        "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
+        "${input:getConfigProjectName}",
+        "0",
+        "1",
+        "${input:getConfigExcludeFolders}"
+      ],
+      "options": {
+        "cwd": "${input:subProjectSource}"
+      },
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "focus": true,
+        "reveal": "always",
+        "clear": true
+      },
+      "dependsOn": ["Set dependencies"]
+    },
+    {
+      "type": "cppbuild",
+      "label": "C/C++: x64 cl.exe rebuild project",
+      "command": "",
+      "args": [
+        "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
+        "${input:getConfigProjectName}",
+        "1",
+        "1",
+        "${input:getConfigExcludeFolders}"
+      ],
+      "options": {
+        "cwd": "${input:subProjectSource}"
+      },
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "focus": true,
+        "reveal": "always",
+        "clear": true
+      },
+      "dependsOn": ["Set dependencies"]
+    },
+    {
+      "type": "cppbuild",
+      "label": "C/C++: x64 link.exe link project",
+      "command": "",
+      "args": [
+        "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
+        "${input:getConfigProjectName}",
+        "2",
+        "1",
+        "${input:getConfigExcludeFolders}"
+      ],
+      "options": {
+        "cwd": "${input:subProjectSource}"
+      },
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "focus": true,
+        "reveal": "always",
+        "clear": true
+      },
+      "dependsOn": ["Set dependencies"]
+    },
+    {
+      "type": "cppbuild",
+      "label": "C/C++: x86 cl.exe build project",
+      "command": "",
+      "args": [
+        "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
+        "${input:getConfigProjectName}",
+        "0",
+        "0",
+        "${input:getConfigExcludeFolders}"
+      ],
+      "options": {
+        "cwd": "${input:subProjectSource}"
+      },
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "focus": true,
+        "reveal": "always",
+        "clear": true
+      },
+      "dependsOn": ["Set dependencies"]
+    },
+    {
+      "type": "cppbuild",
+      "label": "C/C++: x86 cl.exe rebuild project",
+      "command": "",
+      "args": [
+        "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
+        "${input:getConfigProjectName}",
+        "1",
+        "0",
+        "${input:getConfigExcludeFolders}"
+      ],
+      "options": {
+        "cwd": "${input:subProjectSource}"
+      },
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "focus": true,
+        "reveal": "always",
+        "clear": true
+      },
+      "dependsOn": ["Set dependencies"]
+    },
+    {
+      "type": "cppbuild",
+      "label": "C/C++: x86 link.exe link project",
+      "command": "",
+      "args": [
+        "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
+        "${input:getConfigProjectName}",
+        "2",
+        "0",
+        "${input:getConfigExcludeFolders}"
+      ],
+      "options": {
+        "cwd": "${input:subProjectSource}"
+      },
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "focus": true,
+        "reveal": "always",
+        "clear": true
+      },
+      "dependsOn": ["Set dependencies"]
+    },
+    {
+      "type": "shell",
+      "label": "Set dependencies",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "\"${workspaceFolder}\\.vscode\\Scripts\\set_project.ps1",
+        "-SRC_NAME",
+        "${config:SourceDirName}",
+        "-BIN_NAME",
+        "${config:BuildDirName}",
+        "-INCLUDE_NAME",
+        "${config:IncludeDirName}",
+        "-RES_NAME",
+        "${config:ResourceDirName}",
+        "\""
+      ],
+      "presentation": {
+        "showReuseMessage": false,
+        "focus": false,
+        "revealProblems": "onProblem",
+        // If something goes wrong reverse the following two flags.
+        "echo": false,
+        "close": true
+      },
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${fileDirname}"
+      }
+    }
+  ],
+
+  "inputs": [
+    {
+      "id": "subProjectSource",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+        "command": "${workspaceFolder}\\.vscode\\Scripts\\get_source_path.bat",
+        "cwd": "${fileDirName}",
+        "useSingleResult": true
+      }
+    },
+    {
+      "id": "getConfigProjectName",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+        "command": "${workspaceFolder}\\.vscode\\Scripts\\find_project_name.bat",
+        "cwd": "${fileDirName}",
+        "useSingleResult": true
+      }
+    },
+    {
+      "id": "getConfigExcludeFolders",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+        "command": "${workspaceFolder}\\.vscode\\Scripts\\find_project_exclude.bat ${workspaceFolder}\\.vscode\\Scripts\\jq.exe",
+        "cwd": "${fileDirName}",
+        "useSingleResult": true
+      }
+    },
+  ]
+}

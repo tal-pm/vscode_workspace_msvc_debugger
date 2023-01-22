@@ -1,0 +1,89 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "name": "cl.exe x64 - Build and debug active project",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${input:subProjectBuild}\\${input:getConfigProjectName}.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${input:subProjectSource}",
+      "environment": [],
+      "console": "integratedTerminal", //set to true to see output in cmd instead
+      "preLaunchTask": "${input:buildModeCLx64}"
+    },
+    {
+      "name": "cl.exe x86 - Build and debug active project",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${input:subProjectBuild}\\${input:getConfigProjectName}.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${input:subProjectSource}",
+      "environment": [],
+      "console": "integratedTerminal", //set to true to see output in cmd instead
+      "preLaunchTask": "${input:buildModeCLx86}"
+    },
+  ],
+  "inputs": [
+    {
+      "id": "buildModeCLx64",
+      "type": "command",
+      "command": "extension.commandvariable.pickStringRemember",
+      "args": {
+        "description": "How would you like to debug? ",
+        "options": [
+          ["Build Project", "C/C++: x64 cl.exe build project"],
+          ["Rebuild Project", "C/C++: x64 cl.exe rebuild project"],
+          ["Run Project", "C/C++: x64 link.exe link project"],
+        ],
+        "default": "Run Project"
+      }
+    },
+    {
+      "id": "buildModeCLx86",
+      "type": "command",
+      "command": "extension.commandvariable.pickStringRemember",
+      "args": {
+        "description": "How would you like to debug? ",
+        "options": [
+          ["Build Project", "C/C++: x86 cl.exe build project"],
+          ["Rebuild Project", "C/C++: x86 cl.exe rebuild project"],
+          ["Run Project", "C/C++: x86 link.exe link project"],
+        ],
+        "default": "Run Project"
+      }
+    },
+    {
+      "id": "subProjectBuild",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+        "command": "${workspaceFolder}\\.vscode\\Scripts\\get_build_path.bat",
+        "cwd": "${fileDirName}",
+        "useSingleResult": true
+      }
+    },
+    {
+      "id": "subProjectSource",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+        "command": "${workspaceFolder}\\.vscode\\Scripts\\get_source_path.bat",
+        "cwd": "${fileDirName}",
+        "useSingleResult": true
+      }
+    },
+    {
+      "id": "getConfigProjectName",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+        "command": "${workspaceFolder}\\.vscode\\Scripts\\find_project_name.bat",
+        "cwd": "${fileDirName}",
+        "useSingleResult": true
+      }
+    },
+  ]
+}
