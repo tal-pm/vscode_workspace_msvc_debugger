@@ -14,13 +14,15 @@ if not exist %jsonFile% (
 
 for /f "delims=" %%i in ('%1 -r ".ExcludeFolders[]" "%jsonFile%"') do (
     if defined ExcludeFolders (
-        set "ExcludeFolders=!ExcludeFolders!,%%i"
+        set "ExcludeFolders=!ExcludeFolders!,"%%i""
     ) else (
-        set "ExcludeFolders=%%i"
+        set "ExcludeFolders="%%i""
     )
 )
 
 if not defined ExcludeFolders (
     set "ExcludeFolders=\b"
+    echo !ExcludeFolders!
+    exit /b
 )
 echo %ExcludeFolders%

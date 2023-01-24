@@ -4,6 +4,13 @@ for /f "delims=" %%i in ('C:\Windows\System32\WindowsPowerShell\v1.0\powershell.
 for %%I in ("%path%") do set "folder=%%~nxI"
 set "jsonFile=%path%\config.json"
 
-FOR /f "usebackqtokens=1,2delims=:, " %%b IN (`type %jsonFile%`) DO IF %%b=="ProjectName" SET "ProjectName=%%~c"
-if not defined ProjectName (set "ProjectName=%folder%")
+for /f "delims=" %%i in ('%1 -r ".ProjectName" "%jsonFile%"') do SET "ProjectName="%%i""
+if not defined ProjectName (set ProjectName="%folder%")
+
+if [%2]==[] goto OUTPUT_PROJECT_NAME
+if /I "%2"=="/NoQuotes" (
+    set ProjectName=%ProjectName:"=%
+)
+
+:OUTPUT_PROJECT_NAME
 echo %ProjectName%

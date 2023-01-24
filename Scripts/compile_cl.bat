@@ -1,9 +1,14 @@
 @echo off
 for /f "delims=" %%i in ('C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "((Get-ChildItem -Path ..\ -Directory | where {$_.name -match '^((?:[Ii]nclude(?:s)?)(?!.*(?:[Ii]nclude(?:s)?)).*)$'}).fullname) -join ' '"') do set includepath=%%i
+for %%a in (dir /x "%includepath%") do set "includepath=%%~sa"
 for /f "delims=" %%i in ('C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "((Get-ChildItem -Path ..\ -Directory | where {$_.name -match '^((?:[Bb]uild(?:s)?|[Bb]in(?:s)?)(?!.*(?:[Bb]uild(?:s)?|[Bb]in(?:s)?)).*)$'}).fullname) -join ' '"') do set objectpath=%%i
-for /f "delims=" %%i in ('C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "((Get-ChildItem -Path ..\ -Directory | where {$_.name -match '^((?:[Ll]ibraries|[Ll]ib(?:rary|s)?)(?!.*(?:[Ll]ibraries|[Ll]ib(?:rary|s)?)).*)$'}).fullname) -join ' '"') do set libpath=%%i\*.lib
+for %%a in (dir /x "%objectpath%") do set "objectpath=%%~sa"
+for /f "delims=" %%i in ('C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "((Get-ChildItem -Path ..\ -Directory | where {$_.name -match '^((?:[Ll]ibraries|[Ll]ib(?:rary|s)?)(?!.*(?:[Ll]ibraries|[Ll]ib(?:rary|s)?)).*)$'}).fullname) -join ' '"') do set libpath=%%i
+if defined libpath (
+    for %%a in (dir /x "%libpath%") do set "libpath=%%~sa\*.lib"
+)
 
-set fileBasenameNoExtension=%1
+set fileBasenameNoExtension=%~1
 set buildMode=%2
 if not defined buildMode (
     echo "Err: No build mode specified: (options: 0-Build, 1-Rebuild, 2-LinkOnly)"
@@ -47,8 +52,8 @@ if not defined buildType (
     shift
     shift
     :loop
-    if "%1"=="" goto end
-    if "%1"=="\b" goto end
+    if "%~1"=="" goto end
+    if "%~1"=="\b" goto end
     set "excludeDirs=%excludeDirs%,%1"
     shift
     goto loop
@@ -62,14 +67,14 @@ if not defined buildType (
     ') do set excludeDirs=%%*
 
     :: Find all of the files in the source directory while excluding folders in the excludeDirs. ::
-    for /r %%f in (*.cpp,*.c) do (
+    for /r %%f in ("*.cpp","*.c") do (
         set "check="
         for %%i in (!excludeDirs!) do (
-            if "%%~dpf"=="%%i" (
+            if "%%~dpf"==%%i (
                 set "check=1"
                 goto :break_loop
             ) else (
-                echo %%~dpf | findstr /i /c:"%%i" > nul
+                echo "%%~dpf" | findstr /i /c:%%i > nul
                 if !errorlevel!==0 (
                     set "check=1"
                     goto :break_loop
@@ -81,9 +86,9 @@ if not defined buildType (
             set "fpath=%%~dpf"
             set "fpath=!fpath:%cd%\=!"
             if %buildMode% EQU 2 (
-                set result=!result! %%~nxf
+                set result=!result! "%%~nxf"
             ) else (
-                set result=!result! .\!fpath!%%~nxf
+                set result=!result! ".\!fpath!%%~nxf"
             )
         )
     )
@@ -101,14 +106,14 @@ if not defined buildType (
 
 :COMPILE_&_LINK
 :: Uncomment to see the full call to cl.exe (Used for debugging). ::
-@echo on
+@echo off
 if not %buildMode% EQU 2 (
-    %compilerpath% && cl.exe /Zi /MDd /EHsc /nologo /I %includepath% /Fo%objectpath%\ /Fd%objectpath%\ /ILK:%objectpath%\ /INCREMENTAL %isRebuild%%BuildFiles% /link /OUT:%objectpath%\%fileBasenameNoExtension%.exe /MANIFEST /NXCOMPAT /DYNAMICBASE "kernel32.lib" "user32.lib" "gdi32.lib" "winspool.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "odbc32.lib" "odbccp32.lib" %libpath% /SUBSYSTEM:CONSOLE /DEBUG /MACHINE:%MACHINE_TYPE% /LIBPATH:%LIB_VS% /LIBPATH:%LIB_SDK%
+    %compilerpath% && cl.exe /Zi /MDd /EHsc /nologo /I %includepath% /Fo%objectpath%\ /Fd%objectpath%\ /ILK:%objectpath%\ /INCREMENTAL %isRebuild%%BuildFiles% /link /OUT:"%objectpath%\%fileBasenameNoExtension%.exe" /MANIFEST /NXCOMPAT /DYNAMICBASE "kernel32.lib" "user32.lib" "gdi32.lib" "winspool.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "odbc32.lib" "odbccp32.lib" %libpath% /SUBSYSTEM:CONSOLE /DEBUG /MACHINE:%MACHINE_TYPE% /LIBPATH:%LIB_VS% /LIBPATH:%LIB_SDK%
     exit /b
 ) 
 else (
     cd %objectpath%
-    %compilerpath% && link.exe /OUT:%objectpath%\%fileBasenameNoExtension%.exe /MANIFEST /NXCOMPAT /DYNAMICBASE "kernel32.lib" "user32.lib" "gdi32.lib" "winspool.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "odbc32.lib" "odbccp32.lib" %libpath% /SUBSYSTEM:CONSOLE /DEBUG /MACHINE:%MACHINE_TYPE% /LIBPATH:%LIB_VS% /LIBPATH:%LIB_SDK% %BuildFiles%
+    %compilerpath% && link.exe /OUT:"%objectpath%\%fileBasenameNoExtension%.exe" /MANIFEST /NXCOMPAT /DYNAMICBASE "kernel32.lib" "user32.lib" "gdi32.lib" "winspool.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "odbc32.lib" "odbccp32.lib" %libpath% /SUBSYSTEM:CONSOLE /DEBUG /MACHINE:%MACHINE_TYPE% /LIBPATH:%LIB_VS% /LIBPATH:%LIB_SDK% %BuildFiles%
     exit /b
 )
 

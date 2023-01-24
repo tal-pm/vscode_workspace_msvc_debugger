@@ -80,7 +80,7 @@
       "type": "command",
       "command": "shellCommand.execute",
       "args": {
-        "command": "${workspaceFolder}\\.vscode\\Scripts\\find_project_name.bat",
+        "command": "${workspaceFolder}\\.vscode\\Scripts\\find_project_name.bat ${workspaceFolder}\\.vscode\\Scripts\\jq.exe /NoQuotes",
         "cwd": "${fileDirName}",
         "useSingleResult": true
       }
