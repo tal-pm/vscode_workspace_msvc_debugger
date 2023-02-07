@@ -106,7 +106,7 @@ if not defined buildType (
 
 :COMPILE_&_LINK
 :: Uncomment to see the full call to cl.exe (Used for debugging). ::
-@echo off
+:: @echo on
 if not %buildMode% EQU 2 (
     %compilerpath% && cl.exe /Zi /MDd /EHsc /nologo /I %includepath% /Fo%objectpath%\ /Fd%objectpath%\ /ILK:%objectpath%\ /INCREMENTAL %isRebuild%%BuildFiles% /link /OUT:"%objectpath%\%fileBasenameNoExtension%.exe" /MANIFEST /NXCOMPAT /DYNAMICBASE "kernel32.lib" "user32.lib" "gdi32.lib" "winspool.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "odbc32.lib" "odbccp32.lib" %libpath% /SUBSYSTEM:CONSOLE /DEBUG /MACHINE:%MACHINE_TYPE% /LIBPATH:%LIB_VS% /LIBPATH:%LIB_SDK%
     exit /b
