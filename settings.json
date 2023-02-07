@@ -93,7 +93,8 @@
     "forward_list": "cpp",
     "iomanip": "cpp",
     "mutex": "cpp",
-    "optional": "cpp"
+    "optional": "cpp",
+    "condition_variable": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled",
 
