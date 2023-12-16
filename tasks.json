@@ -7,10 +7,8 @@
       "command": "",
       "args": [
         "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
-        "${input:getConfigProjectName}",
         "0",
         "1",
-        "${input:getConfigExcludeFolders}"
       ],
       "options": {
         "cwd": "${input:subProjectSource}"
@@ -29,10 +27,8 @@
       "command": "",
       "args": [
         "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
-        "${input:getConfigProjectName}",
         "1",
         "1",
-        "${input:getConfigExcludeFolders}"
       ],
       "options": {
         "cwd": "${input:subProjectSource}"
@@ -51,10 +47,8 @@
       "command": "",
       "args": [
         "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
-        "${input:getConfigProjectName}",
         "2",
         "1",
-        "${input:getConfigExcludeFolders}"
       ],
       "options": {
         "cwd": "${input:subProjectSource}"
@@ -73,10 +67,8 @@
       "command": "",
       "args": [
         "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
-        "${input:getConfigProjectName}",
         "0",
         "0",
-        "${input:getConfigExcludeFolders}"
       ],
       "options": {
         "cwd": "${input:subProjectSource}"
@@ -95,10 +87,8 @@
       "command": "",
       "args": [
         "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
-        "${input:getConfigProjectName}",
         "1",
         "0",
-        "${input:getConfigExcludeFolders}"
       ],
       "options": {
         "cwd": "${input:subProjectSource}"
@@ -117,10 +107,8 @@
       "command": "",
       "args": [
         "${workspaceFolder}\\.vscode\\Scripts\\compile_cl.bat",
-        "${input:getConfigProjectName}",
         "2",
         "0",
-        "${input:getConfigExcludeFolders}"
       ],
       "options": {
         "cwd": "${input:subProjectSource}"
@@ -178,26 +166,6 @@
         "cwd": "${fileDirName}",
         "useSingleResult": true
       }
-    },
-    {
-      "id": "getConfigProjectName",
-      "type": "command",
-      "command": "shellCommand.execute",
-      "args": {
-        "command": "${workspaceFolder}\\.vscode\\Scripts\\find_project_name.bat ${workspaceFolder}\\.vscode\\Scripts\\jq.exe",
-        "cwd": "${fileDirName}",
-        "useSingleResult": true
-      }
-    },
-    {
-      "id": "getConfigExcludeFolders",
-      "type": "command",
-      "command": "shellCommand.execute",
-      "args": {
-        "command": "${workspaceFolder}\\.vscode\\Scripts\\find_project_exclude.bat ${workspaceFolder}\\.vscode\\Scripts\\jq.exe",
-        "cwd": "${fileDirName}",
-        "useSingleResult": true
-      }
-    },
+    }
   ]
 }
