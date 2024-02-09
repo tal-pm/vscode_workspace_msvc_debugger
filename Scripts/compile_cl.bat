@@ -49,15 +49,20 @@ if not defined buildType (
 :: Convert the args for the exclude dirs to a comma separated string. ::
 :GET_CONFIGS
     for /f "delims=" %%i in ('C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "'%includepath%' -replace '\\((?:[Ss]ource(?:s)?|[Ss]rc(?:s)?)(?!.*(?:[Ss]ource(?:s)?|[Ss]rc(?:s)?)).*)|((?:[Bb]uild(?:s)?|[Bb]in(?:s)?)(?!.*(?:[Bb]uild(?:s)?|[Bb]in(?:s)?)).*)|((?:[Ii]nclude(?:s)?)(?!.*(?:[Ii]nclude(?:s)?)).*)|((?:[Rr]esource(?:s)?|[Rr]es)(?!.*(?:[Rr]esource(?:s)?|[Rr]es)).*)|((?:[Ll]ibraries|[Ll]ib(?:rary|s)?)(?!.*(?:[Ll]ibraries|[Ll]ib(?:rary|s)?)).*)', ''"') do set project_path=%%i
-    set "jsonFile=%project_path%\config.json"
-    set "jq=%project_path%\.vscode\Scripts\jq.exe"
+    set "jsonFile=%project_path%config.json"
+    set "jq=%~dp0jq.exe"
 
     :GET_PROJECT_NAME
         for %%I in ("%project_path%") do set "folder=%%~nxI"
         
         for /f "delims=" %%i in ('%jq% -r ".ProjectName" "%jsonFile%"') do SET "fileBasenameNoExtension="%%i""
-        if not defined fileBasenameNoExtension (set fileBasenameNoExtension="%folder%")
-
+        if not defined fileBasenameNoExtension (
+            set fileBasenameNoExtension="%folder%"
+            @echo on
+            echo "Project name is not defined: setting to default - %fileBasenameNoExtension:"=%"
+            @echo off 
+        )
+            
         set fileBasenameNoExtension=%fileBasenameNoExtension:"=%
 
     :GET_DEBUG_MODE
@@ -65,8 +70,18 @@ if not defined buildType (
         set "linkDebug="
 
         for /f "delims=" %%i in ('%jq% -r ".DebugMode" "%jsonFile%"') do SET "DebugMode="%%i""
-        if not defined DebugMode (set DebugMode="true")
-        if %DebugMode%=="null" (set DebugMode="true")
+        if not defined DebugMode (
+            set DebugMode="true"
+            @echo on
+            echo "Debug mode is not defined: setting to default - true"
+            @echo off 
+        )
+        if %DebugMode%=="null" (
+            set DebugMode="true"
+            @echo on
+            echo "Debug mode is not defined: setting to default - true"
+            @echo off 
+        )
         
         if %DebugMode%=="true" (
             set "isDebug=/MDd"
@@ -85,6 +100,11 @@ if not defined buildType (
             )
         )
 
+        if not defined cmd_flags (
+            @echo on
+            echo "Cmd flags is not defined: setting to default - []"
+            @echo off 
+        )
         endlocal&set "cmd_flags=%cmd_flags%"
 
     :GET_ADDITIONAL_INCLUDES
@@ -99,6 +119,11 @@ if not defined buildType (
             )
         )
 
+        if not defined additional_includes (
+            @echo on
+            echo "Additional includes is not defined: setting to default - []"
+            @echo off 
+        )
         endlocal&set "additional_includes=%additional_includes%"
 
     :GET_ADDITIONAL_LIBS
@@ -113,6 +138,11 @@ if not defined buildType (
             )
         )
 
+        if not defined additional_libs (
+            @echo on
+            echo "Additional libraries is not defined: setting to default - []"
+            @echo off 
+        )
         endlocal&set "additional_libs=%additional_libs%"
 
     :GET_ADDITIONAL_DEPENDENCIES
@@ -127,6 +157,11 @@ if not defined buildType (
             )
         )
 
+        if not defined additional_dependencies (
+            @echo on
+            echo "Additional dependencies is not defined: setting to default - []"
+            @echo off 
+        )
         endlocal&set "additional_dependencies=%additional_dependencies%"
 
     :GET_EXCLUDE_FOLDERS
@@ -146,6 +181,9 @@ if not defined buildType (
 
         if not defined excludeDirs (
             set "excludeDirs=\b"
+            @echo on
+            echo "Exclude folders is not defined: setting to default - []"
+            @echo off 
         )
 
 :: Find all of the files in the source directory while excluding files in the excludeDirs. ::
